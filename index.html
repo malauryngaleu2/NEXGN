@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXGN — Video-First Hiring</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#f0ede6;font-family:'DM Sans',sans-serif;overflow-x:hidden}
+.noise{position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+.glow{position:fixed;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(255,90,50,0.09) 0%,transparent 70%);top:-150px;right:-150px;pointer-events:none;z-index:0;animation:gd 8s ease-in-out infinite alternate}
+.glow2{position:fixed;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,160,50,0.06) 0%,transparent 70%);bottom:0;left:-80px;pointer-events:none;z-index:0;animation:gd2 10s ease-in-out infinite alternate}
+@keyframes gd{0%{transform:translate(0,0)}100%{transform:translate(-40px,60px)}}
+@keyframes gd2{0%{transform:translate(0,0)}100%{transform:translate(60px,-40px)}}
+.wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:0 24px}
+.fade-in{opacity:0;transform:translateY(20px);transition:opacity 0.55s ease,transform 0.55s ease}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+.sec{padding:72px 0;border-bottom:.5px solid rgba(255,255,255,0.06)}
+.sec-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#ff5a32;margin-bottom:24px}
+.sec-intro{font-size:22px;font-weight:500;line-height:1.4;color:#f0ede6;margin-bottom:14px;max-width:600px}
+.sec-body{font-size:15px;color:rgba(240,237,230,0.42);line-height:1.78;font-weight:300;max-width:620px;margin-bottom:36px}
+
+/* HERO */
+.hero{padding:64px 0 72px}
+.badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,90,50,0.12);border:.5px solid rgba(255,90,50,0.3);border-radius:100px;padding:5px 14px;font-size:12px;color:#ff7a5a;letter-spacing:.06em;text-transform:uppercase;margin-bottom:32px}
+.dot{width:6px;height:6px;border-radius:50%;background:#ff5a32;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.6)}}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:40px;align-items:start}
+h1{font-family:'Bebas Neue',sans-serif;font-size:clamp(58px,10vw,96px);line-height:.92;color:#f0ede6;margin-bottom:20px}
+.typed-word{color:#ff5a32;border-right:4px solid #ff5a32;padding-right:4px;animation:blink .8s step-end infinite}
+@keyframes blink{0%,100%{border-color:#ff5a32}50%{border-color:transparent}}
+.hero-sub{font-size:17px;color:rgba(240,237,230,0.45);font-weight:300;line-height:1.7;margin-bottom:36px;max-width:520px}
+.toggle-row{display:flex;background:rgba(255,255,255,0.04);border:.5px solid rgba(255,255,255,0.08);border-radius:12px;padding:4px;margin-bottom:14px;max-width:340px}
+.tbtn{flex:1;padding:10px 16px;border:none;background:transparent;color:rgba(240,237,230,0.35);font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;border-radius:9px;cursor:pointer;transition:all .2s}
+.tbtn.active{background:#ff5a32;color:#fff}
+.form-row{display:flex;gap:10px;flex-wrap:wrap;max-width:480px}
+.form-row input{flex:1;min-width:180px;background:rgba(255,255,255,0.05);border:.5px solid rgba(255,255,255,0.12);border-radius:10px;padding:14px 18px;font-family:'DM Sans',sans-serif;font-size:15px;color:#f0ede6;outline:none;transition:border-color .2s}
+.form-row input::placeholder{color:rgba(240,237,230,0.22)}
+.form-row input:focus{border-color:rgba(255,90,50,0.5)}
+.cta-btn{background:#ff5a32;color:#fff;border:none;border-radius:10px;padding:14px 26px;font-family:'DM Sans',sans-serif;font-size:15px;font-weight:500;cursor:pointer;white-space:nowrap;transition:background .2s,transform .15s}
+.cta-btn:hover{background:#ff7a5a}
+.cta-btn:active{transform:scale(.98)}
+.cta-btn:disabled{opacity:.6;cursor:not-allowed}
+.privacy{font-size:12px;color:rgba(240,237,230,0.18);margin-top:10px}
+.ok{display:none;align-items:center;gap:10px;background:rgba(29,158,117,0.1);border:.5px solid rgba(29,158,117,0.3);border-radius:10px;padding:14px 18px;font-size:14px;color:#5dcaa5;max-width:480px;margin-top:10px}
+.ok.show{display:flex}
+.err{display:none;align-items:center;gap:10px;background:rgba(226,75,74,0.1);border:.5px solid rgba(226,75,74,0.3);border-radius:10px;padding:14px 18px;font-size:14px;color:#e24b4a;max-width:480px;margin-top:10px}
+.err.show{display:flex}
+
+/* TICKER */
+.ticker-wrap{overflow:hidden;border-top:.5px solid rgba(255,255,255,0.06);border-bottom:.5px solid rgba(255,255,255,0.06);padding:14px 0;position:relative;z-index:1}
+.ticker-inner{display:flex;width:max-content;animation:tick 22s linear infinite}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.ticker-item{display:flex;align-items:center;gap:10px;padding:0 32px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:rgba(240,237,230,0.25);white-space:nowrap}
+.tdot{width:4px;height:4px;border-radius:50%;background:#ff5a32;opacity:.5;flex-shrink:0}
+
+/* STATS */
+.stats-bar{display:flex;border-bottom:.5px solid rgba(255,255,255,0.06);position:relative;z-index:1}
+.stat-cell{flex:1;padding:28px 16px;border-right:.5px solid rgba(255,255,255,0.06);text-align:center}
+.stat-cell:last-child{border-right:none}
+.snum{font-family:'Bebas Neue',sans-serif;font-size:38px;color:#f0ede6;line-height:1;display:block}
+.slbl{font-size:11px;color:rgba(240,237,230,0.28);text-transform:uppercase;letter-spacing:.08em;margin-top:4px;display:block}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{background:rgba(255,255,255,0.025);border:.5px solid rgba(255,255,255,0.07);border-radius:12px;padding:20px;transition:border-color .25s,background .25s}
+.card:hover{border-color:rgba(255,90,50,0.22);background:rgba(255,90,50,0.04)}
+.card-icon{font-size:22px;color:rgba(255,90,50,0.45);margin-bottom:10px;display:block;transition:color .2s}
+.card:hover .card-icon{color:#ff5a32}
+.card-title{font-size:14px;font-weight:500;color:#f0ede6;margin-bottom:6px}
+.card-desc{font-size:13px;color:rgba(240,237,230,0.33);line-height:1.6;font-weight:300}
+
+/* AUDIENCE */
+.aud-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.aud-card{background:rgba(255,90,50,0.04);border:.5px solid rgba(255,90,50,0.15);border-radius:12px;padding:24px 20px;transition:border-color .25s,background .25s}
+.aud-card:hover{border-color:rgba(255,90,50,0.35);background:rgba(255,90,50,0.07)}
+.aud-role{font-size:11px;font-weight:500;color:#ff7a5a;text-transform:uppercase;letter-spacing:.1em;margin-bottom:10px}
+.aud-head{font-size:15px;font-weight:500;color:#f0ede6;margin-bottom:14px;line-height:1.4}
+.aud-list{list-style:none;display:flex;flex-direction:column;gap:7px}
+.aud-list li{font-size:13px;color:rgba(240,237,230,0.38);font-weight:300;padding-left:14px;position:relative;line-height:1.5}
+.aud-list li::before{content:'—';position:absolute;left:0;color:rgba(255,90,50,0.35);font-size:11px;top:1px}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column}
+.step{display:flex;gap:20px;padding:24px 0;border-bottom:.5px solid rgba(255,255,255,0.05);align-items:flex-start;transition:padding-left .25s}
+.step:hover{padding-left:8px}
+.step:last-child{border-bottom:none}
+.step-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:rgba(255,90,50,0.2);min-width:32px;line-height:1;margin-top:2px;transition:color .2s}
+.step:hover .step-num{color:rgba(255,90,50,0.6)}
+.step-title{font-size:16px;font-weight:500;color:#f0ede6;margin-bottom:4px}
+.step-desc{font-size:14px;color:rgba(240,237,230,0.36);line-height:1.65;font-weight:300}
+
+/* WAITLIST BOTTOM */
+.waitlist{padding:72px 0 88px}
+.wl-head{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,7vw,72px);line-height:1;color:#f0ede6;margin-bottom:10px}
+.wl-sub{font-size:15px;color:rgba(240,237,230,0.38);font-weight:300;margin-bottom:28px;line-height:1.65;max-width:480px}
+
+/* RESPONSIVE */
+@media(min-width:768px){
+  .wrap{padding:0 48px}
+  .hero{padding:80px 0 88px}
+  .hero-grid{grid-template-columns:1fr 1fr;gap:60px;align-items:center}
+  .hero-sub{font-size:18px}
+  .card-grid{grid-template-columns:repeat(4,1fr)}
+  .stat-cell{padding:32px 24px}
+  .snum{font-size:44px}
+  .sec-intro{font-size:26px}
+  .steps{display:grid;grid-template-columns:1fr 1fr;gap:0 40px}
+}
+@media(min-width:1024px){
+  .wrap{padding:0 64px}
+}
+</style>
+</head>
+<body>
+<div class="noise"></div>
+<div class="glow"></div>
+<div class="glow2"></div>
+
+<!-- HERO -->
+<div class="wrap">
+  <div class="hero">
+    <div class="badge fade-in">
+      <div class="dot"></div>
+      Now building — join early
+    </div>
+    <div class="hero-grid">
+      <div>
+        <h1 class="fade-in" style="transition-delay:.05s">
+          HIRING<br>SHOULD<br>FEEL<br><span class="typed-word" id="typed"></span>
+        </h1>
+        <p class="hero-sub fade-in" style="transition-delay:.1s">NEXGN is a video-first recruiting platform where candidates show up as real people — not bullet points — and companies find talent they'd never find on a resume.</p>
+      </div>
+      <div class="fade-in" style="transition-delay:.18s">
+        <div class="toggle-row">
+          <button class="tbtn active" id="h-bc" onclick="setRole('candidate','h')">I'm a candidate</button>
+          <button class="tbtn" id="h-br" onclick="setRole('recruiter','h')">I'm a recruiter</button>
+        </div>
+        <div class="form-row">
+          <input type="email" id="h-email" placeholder="your@email.com">
+          <button class="cta-btn" id="h-btn" onclick="submitForm('h')">Get early access</button>
+        </div>
+        <div class="ok" id="h-ok"><span>You're on the list. We'll be in touch.</span></div>
+        <div class="err" id="h-err"><span>Something went wrong. Please try again.</span></div>
+        <p class="privacy">No spam. Unsubscribe anytime.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="stat-cell fade-in"><span class="snum" id="cnt">847</span><span class="slbl">On the waitlist</span></div>
+  <div class="stat-cell fade-in" style="transition-delay:.08s"><span class="snum">60s</span><span class="slbl">To apply for any role</span></div>
+  <div class="stat-cell fade-in" style="transition-delay:.16s"><span class="snum">0</span><span class="slbl">Resumes required</span></div>
+</div>
+
+<!-- PROBLEM -->
+<div class="wrap">
+  <div class="sec">
+    <p class="sec-label fade-in">The problem</p>
+    <p class="sec-intro fade-in" style="transition-delay:.05s">The resume is a 30-year-old tool still gatekeeping a world it was never built for.</p>
+    <p class="sec-body fade-in" style="transition-delay:.1s">Today's candidates are articulate, creative, and driven — but they're filtered out before a human ever sees them. A one-page document can't capture how someone communicates, leads a room, or handles pressure. And recruiters, buried in hundreds of identical applications, don't have the time or signal to find who's actually right. The system is broken on both sides.</p>
+    <div class="card-grid">
+      <div class="card fade-in"><span class="card-icon">✕</span><div class="card-title">Filtered by format</div><div class="card-desc">ATS systems reject qualified people before a recruiter ever reads their name.</div></div>
+      <div class="card fade-in" style="transition-delay:.07s"><span class="card-icon">◎</span><div class="card-title">Personality is invisible</div><div class="card-desc">A resume tells you what someone did. It tells you nothing about who they are.</div></div>
+      <div class="card fade-in" style="transition-delay:.14s"><span class="card-icon">◷</span><div class="card-title">Hiring takes too long</div><div class="card-desc">Average time-to-hire is 6–8 weeks. Most candidates are gone by week three.</div></div>
+      <div class="card fade-in" style="transition-delay:.21s"><span class="card-icon">↓</span><div class="card-title">Bad hires are expensive</div><div class="card-desc">Culture-fit failures cost 1.5–2x annual salary. You can't measure fit from a PDF.</div></div>
+    </div>
+  </div>
+
+  <!-- WHAT IS NEXGN -->
+  <div class="sec">
+    <p class="sec-label fade-in">What is NEXGN</p>
+    <p class="sec-intro fade-in" style="transition-delay:.05s">A recruiting platform built around one idea: let people speak for themselves.</p>
+    <p class="sec-body fade-in" style="transition-delay:.1s">NEXGN lets candidates record a short video introduction — no scripts, no studio, no stress. Recruiters scroll through real people in real time and connect directly with who stands out. Think of it as the first recruiting platform designed for how people actually communicate: fast, visual, and human. No applications. No cover letters. No black holes.</p>
+    <div class="card-grid">
+      <div class="card fade-in"><span class="card-icon">▶</span><div class="card-title">60-second videos</div><div class="card-desc">Record once, apply everywhere. Your intro travels with you across every role.</div></div>
+      <div class="card fade-in" style="transition-delay:.07s"><span class="card-icon">⊞</span><div class="card-title">Scroll-based discovery</div><div class="card-desc">Recruiters browse candidates the way people browse content — fast and intuitive.</div></div>
+      <div class="card fade-in" style="transition-delay:.14s"><span class="card-icon">⚡</span><div class="card-title">Direct outreach</div><div class="card-desc">No middleman. Companies message candidates directly when there's a match.</div></div>
+      <div class="card fade-in" style="transition-delay:.21s"><span class="card-icon">⊟</span><div class="card-title">Role and industry filters</div><div class="card-desc">Recruiters filter by industry, skills, and role type so discovery stays targeted.</div></div>
+    </div>
+  </div>
+
+  <!-- WHO IT'S FOR -->
+  <div class="sec">
+    <p class="sec-label fade-in">Who it's for</p>
+    <div class="aud-grid">
+      <div class="aud-card fade-in" style="transition-delay:.05s">
+        <div class="aud-role">Candidates</div>
+        <div class="aud-head">You're more than your resume. Now prove it.</div>
+        <ul class="aud-list">
+          <li>Recent grads entering a competitive market</li>
+          <li>Career changers without traditional credentials</li>
+          <li>Creative and communications professionals</li>
+          <li>Marketing, PR, media, and sales talent</li>
+          <li>Anyone who interviews well but applies poorly</li>
+        </ul>
+      </div>
+      <div class="aud-card fade-in" style="transition-delay:.12s">
+        <div class="aud-role">Recruiters & Hiring Teams</div>
+        <div class="aud-head">Find people you'd actually hire in minutes, not weeks.</div>
+        <ul class="aud-list">
+          <li>Startups and agencies moving fast</li>
+          <li>Teams that value personality and culture fit</li>
+          <li>Marketing, creative, and PR departments</li>
+          <li>HR teams drowning in identical applications</li>
+          <li>Companies tired of long pipelines and ghosting</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="sec">
+    <p class="sec-label fade-in">How it works</p>
+    <div class="steps">
+      <div class="step fade-in" style="transition-delay:.04s"><div class="step-num">01</div><div><div class="step-title">Record your 60-second intro</div><div class="step-desc">No resume upload, no lengthy form. Just you, a camera, and 60 seconds to show what makes you worth hiring.</div></div></div>
+      <div class="step fade-in" style="transition-delay:.08s"><div class="step-num">02</div><div><div class="step-title">Get discovered by recruiters</div><div class="step-desc">Your video surfaces to relevant companies filtered by role and industry. Real humans see you — not an algorithm deciding you're not worth it.</div></div></div>
+      <div class="step fade-in" style="transition-delay:.12s"><div class="step-num">03</div><div><div class="step-title">Companies reach out directly</div><div class="step-desc">No application black holes. If a company is interested, they message you. You move fast, together.</div></div></div>
+      <div class="step fade-in" style="transition-delay:.16s"><div class="step-num">04</div><div><div class="step-title">Recruiters: scroll, filter, connect</div><div class="step-desc">Browse a live feed of candidates filtered by role, industry, and location. Shortlist in minutes, not weeks.</div></div></div>
+    </div>
+  </div>
+
+  <!-- BOTTOM WAITLIST -->
+  <div class="waitlist">
+    <p class="sec-label fade-in">Join the waitlist</p>
+    <p class="wl-head fade-in" style="transition-delay:.05s">BE FIRST IN.</p>
+    <p class="wl-sub fade-in" style="transition-delay:.1s">We're building NEXGN in the open and giving early access to people who believe hiring should feel human. Get in early and help shape what this becomes.</p>
+    <div class="fade-in" style="transition-delay:.15s">
+      <div class="toggle-row">
+        <button class="tbtn active" id="b-bc" onclick="setRole('candidate','b')">I'm a candidate</button>
+        <button class="tbtn" id="b-br" onclick="setRole('recruiter','b')">I'm a recruiter</button>
+      </div>
+      <div class="form-row">
+        <input type="email" id="b-email" placeholder="your@email.com">
+        <button class="cta-btn" id="b-btn" onclick="submitForm('b')">Get early access</button>
+      </div>
+      <div class="ok" id="b-ok"><span>You're on the list. We'll be in touch.</span></div>
+      <div class="err" id="b-err"><span>Something went wrong. Please try again.</span></div>
+      <p class="privacy">No spam. Unsubscribe anytime.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+var hr='candidate', br='candidate', count=847;
+var WEB3FORMS_KEY='acf1939b-c1be-4ac6-945a-51f50e9c3ed3';
+
+function setRole(r,ctx){
+  if(ctx==='h'){hr=r;document.getElementById('h-bc').classList.toggle('active',r==='candidate');document.getElementById('h-br').classList.toggle('active',r==='recruiter');}
+  else{br=r;document.getElementById('b-bc').classList.toggle('active',r==='candidate');document.getElementById('b-br').classList.toggle('active',r==='recruiter');}
+}
+
+async function submitForm(ctx){
+  var email=document.getElementById(ctx+'-email').value.trim();
+  var role=ctx==='h'?hr:br;
+  var btn=document.getElementById(ctx+'-btn');
+  var okEl=document.getElementById(ctx+'-ok');
+  var errEl=document.getElementById(ctx+'-err');
+
+  if(!email||!email.includes('@')){
+    document.getElementById(ctx+'-email').style.borderColor='rgba(226,75,74,0.6)';
+    setTimeout(function(){document.getElementById(ctx+'-email').style.borderColor='';},1500);
+    return;
+  }
+
+  btn.disabled=true;
+  btn.textContent='Sending...';
+
+  try {
+    var res=await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        access_key: WEB3FORMS_KEY,
+        email: email,
+        subject: 'NEXGN Waitlist — New ' + role + ' signup',
+        message: 'New waitlist signup\nRole: ' + role + '\nEmail: ' + email
+      })
+    });
+    var data=await res.json();
+    if(data.success){
+      count++;
+      document.getElementById('cnt').textContent=count.toLocaleString();
+      document.getElementById(ctx+'-email').value='';
+      okEl.classList.add('show');
+      errEl.classList.remove('show');
+      setTimeout(function(){okEl.classList.remove('show');},5000);
+    } else {
+      errEl.classList.add('show');
+      okEl.classList.remove('show');
+      setTimeout(function(){errEl.classList.remove('show');},5000);
+    }
+  } catch(e){
+    errEl.classList.add('show');
+    setTimeout(function(){errEl.classList.remove('show');},5000);
+  }
+
+  btn.disabled=false;
+  btn.textContent='Get early access';
+}
+
+/* TYPED HEADLINE */
+var words=['HUMAN.','FAST.','REAL.','BETTER.'],wi=0,ci=0,del=false,el=document.getElementById('typed');
+function type(){var w=words[wi];if(!del){el.textContent=w.slice(0,ci+1);ci++;if(ci===w.length){del=true;setTimeout(type,1600);return;}setTimeout(type,90);}else{el.textContent=w.slice(0,ci-1);ci--;if(ci===0){del=false;wi=(wi+1)%words.length;setTimeout(type,300);return;}setTimeout(type,55);}}
+type();
+
+/* TICKER */
+var ti=['No resumes required','Video-first hiring','Built for real people','Discover talent fast','60 seconds to apply','Human-first recruiting','No application black holes','Let your personality speak'];
+var inn=document.getElementById('ticker'),h='';
+for(var t=0;t<2;t++){ti.forEach(function(i){h+='<div class="ticker-item"><div class="tdot"></div>'+i+'</div>';});}
+inn.innerHTML=h;
+
+/* SCROLL FADE */
+var faders=document.querySelectorAll('.fade-in');
+var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:0.08});
+faders.forEach(function(el){obs.observe(el);});
+setTimeout(function(){document.querySelectorAll('.hero .fade-in,.badge').forEach(function(el){el.classList.add('visible');});},60);
+</script>
+</body>
+</html>
